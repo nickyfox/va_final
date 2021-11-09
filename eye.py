@@ -5,6 +5,7 @@ import cv2
 # Initializing the face and eye cascade classifiers from xml files
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier('haarcascade_eye_tree_eyeglasses.xml')
+smile_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_smile.xml')
 
 # Variable store execution state
 first_read = True
@@ -30,13 +31,14 @@ while (ret):
             roi_face = gray[y:y + h, x:x + w]
             roi_face_clr = img[y:y + h, x:x + w]
             eyes = eye_cascade.detectMultiScale(roi_face, 1.3, 5, minSize=(50, 50))
+            smiles = smile_cascade.detectMultiScale(roi_face, 1.8, 20)
 
             # Examining the length of eyes object for eyes
-            if (len(eyes) >= 2):
+            if (len(eyes) >= 2 and len(smiles) >= 1):
                 # Check if program is running for detection
                 if (first_read):
                     cv2.putText(img,
-                                "Eye detected press s to begin",
+                                "Eye and smile detected! Press s to begin",
                                 (70, 70),
                                 cv2.FONT_HERSHEY_PLAIN, 3,
                                 (0, 255, 0), 2)
@@ -45,13 +47,22 @@ while (ret):
                                 "Eyes open!", (70, 70),
                                 cv2.FONT_HERSHEY_PLAIN, 2,
                                 (255, 255, 255), 2)
+                    ret, img = cap.read()
+                    cv2.imshow('img1', img)
             else:
                 if (first_read):
+                    if len(smiles) == 0:
+                        cv2.putText(img,
+                                    "No smile detected", (70, 70),
+                                    cv2.FONT_HERSHEY_PLAIN, 3,
+                                    (0, 0, 255), 2)
+
                     # To ensure if the eyes are present before starting
-                    cv2.putText(img,
-                                "No eyes detected", (70, 70),
-                                cv2.FONT_HERSHEY_PLAIN, 3,
-                                (0, 0, 255), 2)
+                    else:
+                        cv2.putText(img,
+                                    "No eyes detected", (70, 70),
+                                    cv2.FONT_HERSHEY_PLAIN, 3,
+                                    (0, 0, 255), 2)
                 else:
                     # This will print on console and restart the algorithm
                     print("Blink detected--------------")
@@ -75,4 +86,3 @@ while (ret):
 
 cap.release()
 cv2.destroyAllWindows()
-
