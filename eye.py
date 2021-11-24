@@ -76,7 +76,7 @@ while (ret):
                     (0, 255, 0), 2)
 
     # Controlling the algorithm with keys
-    cv2.imshow('img', img)
+    cv2.imshow('detector', img)
     a = cv2.waitKey(1)
     if (a == ord('q')):
         break
