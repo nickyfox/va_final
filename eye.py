@@ -49,6 +49,7 @@ while (ret):
                                 (255, 255, 255), 2)
                     ret, img = cap.read()
                     cv2.imshow('img1', img)
+                    first_read = True
             else:
                 if (first_read):
                     if len(smiles) == 0:
