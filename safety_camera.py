@@ -25,7 +25,7 @@ def take_picture(all_faces, current_people=0):
             aux_eyes, aux_smiles = get_eyes_and_smiles(xi, yi, wi, hi)
             if len(aux_eyes) >= 2 and len(aux_smiles) >= 1:
                 current_people = current_people + 1
-        # if there are as many faces as smiles
+        # if there are as many faces as smiles and pair of open eyes
         if current_people == amount_of_people:
             ret, img = cap.read()
             cv2.imshow('img1', img)
